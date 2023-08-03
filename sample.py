@@ -19,6 +19,7 @@ def logger(msg):
     print(msg)
     window["Status"].update(msg)
 
+
 # python3 -m pip install psgdemos
 # sg.theme_previewer()
 sg.theme("GrayGrayGray")  # Add a touch of color
@@ -31,7 +32,14 @@ layout = [
 ]
 
 # Create the Window
-window = sg.Window("Window Title", layout, auto_size_text=True, auto_size_buttons=True, resizable=True, element_justification='center')
+window = sg.Window(
+    "Window Title",
+    layout,
+    auto_size_text=True,
+    auto_size_buttons=True,
+    resizable=True,
+    element_justification="center",
+)
 # Event Loop to process "events" and get the "values" of the inputs
 # window = sg.Window(
 #     "Sudoku",

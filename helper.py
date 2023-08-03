@@ -1,5 +1,6 @@
 import json
 
+
 def dumper(arg):
     def json_default(arg):
         return f"{arg.__class__}"

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import datetime
 
+
 def strfdelta(tdelta, fmt):
     d = {"days": tdelta.days}
     d["hours"], rem = divmod(tdelta.seconds, 3600)
     d["minutes"], d["seconds"] = divmod(rem, 60)
     return fmt.format(**d)
+
 
 class TimeController:
     def __init__(self):
@@ -20,9 +22,7 @@ class TimeController:
 
     def status(self) -> datetime.timedelta:
         if self.running:
-            return (
-                datetime.datetime.utcnow() - self.beginning
-            ) + self.delta_since_last_pause
+            return (datetime.datetime.utcnow() - self.beginning) + self.delta_since_last_pause
         else:
             return self.delta_since_last_pause
 

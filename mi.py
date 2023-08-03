@@ -8,21 +8,27 @@ import time
 
 import PySimpleGUI as sg
 
-
-SLEEP_LOOP=0.1
+# settings
+GUI_REFRESH_LOOP = 0.1
 FONT_SIZE = 400
-MUSICFILE="assets/mission_impossible.wav"
+MUSICFILE = "assets/mission_impossible.wav"
 SHOULD_PLAY_MUSIC = True
 # SHOULD_PLAY_MUSIC = False
 
+# settings we should not want to change
 BUTTON_RESTART = "(Re)Start"
 BUTTON_PAUSE_UNPAUSE = "Pause/Unpause"
 BUTTON_RESET = "Reset"
 BUTTON_EXIT = "Exit"
 
+# FONT_NAME = "Courier New"
+FONT_NAME = "IntelOne Mono"
+
+
 def logger(msg):
     print(msg)
     window["Status"].update(msg)
+
 
 sg.theme("GrayGrayGray")
 
@@ -34,7 +40,7 @@ layout = [
             key="-TimeBox-",
             auto_size_text=True,
             justification="center",
-            font=("Courier New", FONT_SIZE),
+            font=(FONT_NAME, FONT_SIZE),
             expand_x=True,
             expand_y=False,
             # background_color="#00aaaa",
@@ -47,7 +53,7 @@ layout = [
         sg.Button(BUTTON_RESET),
         sg.Button(BUTTON_EXIT),
     ],
-    [sg.Text("", key="StatusBar"), sg.Sizegrip()]
+    [sg.Text("", key="StatusBar"), sg.Sizegrip()],
 ]
 
 # Create the Window
@@ -101,7 +107,7 @@ while True:
         window["-TimeBox-"].update(tc.status_pretty())
         window[BUTTON_RESTART].set_focus()
     else:
-        time.sleep(SLEEP_LOOP)
+        time.sleep(GUI_REFRESH_LOOP)
 
     # logger(f"You entered {values[0]}")
 

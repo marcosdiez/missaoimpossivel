@@ -1,5 +1,6 @@
 import simpleaudio as sa
 
+
 class MyAudio:
     def __init__(self, should_play=True):
         self.is_playing = False
@@ -50,7 +51,6 @@ class MyAudio:
 
     def is_playing(self) -> None:
         return self.is_playing
-
 
 
 # import platform
