@@ -9,16 +9,20 @@ import time
 import PySimpleGUI as sg
 
 
-def logger(msg):
-    print(msg)
-    window["Status"].update(msg)
-
-
+SLEEP_LOOP=0.1
 FONT_SIZE = 400
+MUSICFILE="assets/mission_impossible.wav"
+SHOULD_PLAY_MUSIC = True
+# SHOULD_PLAY_MUSIC = False
+
 BUTTON_RESTART = "(Re)Start"
 BUTTON_PAUSE_UNPAUSE = "Pause/Unpause"
 BUTTON_RESET = "Reset"
 BUTTON_EXIT = "Exit"
+
+def logger(msg):
+    print(msg)
+    window["Status"].update(msg)
 
 sg.theme("GrayGrayGray")
 
@@ -63,6 +67,7 @@ window[BUTTON_RESTART].set_focus()
 
 
 tc = TimeController.TimeController()
+musicplayer = myaudio.MyAudio(SHOULD_PLAY_MUSIC)
 while True:
     if tc.is_running():
         event, values = window.read(timeout=10)
@@ -71,25 +76,33 @@ while True:
         event, values = window.read()
 
     # event, values = window.read()
-    print(event)
-    dumper(values)
+    # print(event)
+    # dumper(values)
     if event in (None, sg.WIN_CLOSED, BUTTON_EXIT):
+        print(f"{tc.status()} EVENT={event} ")
+        musicplayer.stop()
         # if user closes window or clicks cancel
         break
     elif event == BUTTON_RESTART:
+        print(f"{tc.status()} EVENT={event} ")
         window[BUTTON_PAUSE_UNPAUSE].set_focus()
+        musicplayer.stop()
         tc.start()
+        musicplayer.start(MUSICFILE)
 
     elif event == BUTTON_PAUSE_UNPAUSE:
+        print(f"{tc.status()} EVENT={event} ")
         tc.pause_or_unpause()
+        musicplayer.pause_or_unpause()
     elif event == BUTTON_RESET:
+        print(f"{tc.status()} EVENT={event} ")
         tc.reset()
+        musicplayer.reset()
         window["-TimeBox-"].update(tc.status_pretty())
+        window[BUTTON_RESTART].set_focus()
     else:
-        time.sleep(.5)
+        time.sleep(SLEEP_LOOP)
 
-
-    print("go")
     # logger(f"You entered {values[0]}")
 
 window.close()
