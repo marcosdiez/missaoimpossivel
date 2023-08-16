@@ -91,7 +91,9 @@ while True:
                 should_be_playing_boom = True
                 print("boom")
                 musicplayer.start(MUSIC_ALARM)
-                tc.pause()
+                tc.reset()
+                window[BUTTON_RESTART].set_focus()
+
     else:
         event, values = window.read()
 
