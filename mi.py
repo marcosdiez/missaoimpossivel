@@ -77,8 +77,6 @@ window["-EXPAND1-"].expand(True, True, True)
 window["-EXPAND2-"].expand(True, True, True)
 window[BUTTON_RESTART].set_focus()
 
-print(window["-TimeBox-"].Size)
-
 should_be_playing_boom = False
 
 tc = TimeController.TimeController(TIME_IN_SECONDS)
