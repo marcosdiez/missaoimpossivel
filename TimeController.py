@@ -10,20 +10,33 @@ def strfdelta(tdelta, fmt):
 
 
 class TimeController:
-    def __init__(self):
+    def __init__(self, seconds=0):
         self.running = False
         self.beginning = datetime.timedelta(seconds=0)
         self.delta_since_last_pause = datetime.timedelta(seconds=0)
         self.one_minute = datetime.timedelta(seconds=60)
+        self.time_zero = datetime.timedelta(seconds=0)
+        self.time_maxseconds = datetime.timedelta(seconds=seconds)
 
     def start(self) -> None:
         self.running = True
         self.beginning = datetime.datetime.utcnow()
 
+    def is_timer_over(self) -> bool:
+        return self.running and ( self.status() <= self.time_zero )
+
     def status(self) -> datetime.timedelta:
         if self.running:
-            return (datetime.datetime.utcnow() - self.beginning) + self.delta_since_last_pause
+            elapsed = (datetime.datetime.utcnow() - self.beginning) + self.delta_since_last_pause
+            if self.time_maxseconds != self.time_zero:
+                result = self.time_maxseconds - elapsed
+                if result < self.time_zero:
+                    return self.time_zero
+                return result
+            return elapsed
         else:
+            if self.time_maxseconds != self.time_zero:
+                return self.time_maxseconds - self.delta_since_last_pause
             return self.delta_since_last_pause
 
     def pause(self) -> None:
