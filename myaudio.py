@@ -1,16 +1,30 @@
 import simpleaudio as sa
+import os
+import os.path
+import random
 
 class MyAudio:
     def __init__(self, should_play=True):
+        self.filename = None
         self.is_playing = False
         self.should_play = True
         self.wave_obj = None
         self.play_obj = None
 
-    def start(self, filename: str) -> None:
+    def _get_filename(self, filename_or_foldername: str) -> str:
+        if os.path.isfile(filename_or_foldername):
+            return filename_or_foldername
+        if os.path.isdir(filename_or_foldername):
+            all_files = os.listdir(filename_or_foldername)
+            choosen_file = random.choice(all_files)
+            print(choosen_file)
+            return os.path.join(filename_or_foldername, choosen_file)
+
+    def start(self, filename_or_foldername: str) -> None:
         if not self.should_play:
             return
-        self.wave_obj = sa.WaveObject.from_wave_file(filename)
+        self.filename = self._get_filename(filename_or_foldername)
+        self.wave_obj = sa.WaveObject.from_wave_file(self.filename)
         self.play_obj = self.wave_obj.play()
         self.is_playing = True
 
@@ -48,6 +62,6 @@ class MyAudio:
             return
         self.play_obj.stop()
 
-    def is_playing(self) -> None:
+    def is_playing(self) -> bool:
         return self.is_playing
 

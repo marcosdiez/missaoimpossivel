@@ -6,5 +6,5 @@ then
     exit 1
 fi
 
-echo ffmpeg -i $1 $(echo $1 |cut -d. -f1).wav
-ffmpeg -i $1 $(echo $1 |cut -d. -f1).wav
+echo ffmpeg -i "$1" "$(echo $1 |cut -d. -f1).wav"
+ffmpeg -i "$1" "$(echo $1 |cut -d. -f1).wav"

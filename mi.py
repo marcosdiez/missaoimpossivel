@@ -11,7 +11,11 @@ import PySimpleGUI as sg
 # settings
 GUI_REFRESH_LOOP = 0.1
 FONT_SIZE = 400
-MUSICFILE = "assets/mission_impossible.wav"
+
+MUSIC_AMBIENT = "assets/ambient"
+MUSIC_VICTORY = "assets/victory"
+MUSIC_ALARM   = "assets/alarm"
+
 SHOULD_PLAY_MUSIC = True
 # SHOULD_PLAY_MUSIC = False
 
@@ -94,7 +98,7 @@ while True:
         window[BUTTON_PAUSE_UNPAUSE].set_focus()
         musicplayer.stop()
         tc.start()
-        musicplayer.start(MUSICFILE)
+        musicplayer.start(MUSIC_AMBIENT)
 
     elif event == BUTTON_PAUSE_UNPAUSE:
         print(f"{tc.status()} EVENT={event} ")

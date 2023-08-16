@@ -2,3 +2,4 @@ env
 old
 __pycache__/
 assets/*.wav
+*.wav
