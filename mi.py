@@ -3,8 +3,8 @@ import time
 
 from helper import dumper
 import myaudio
+import myserial
 import TimeController
-import time
 
 import PySimpleGUI as sg
 
@@ -79,18 +79,18 @@ window[BUTTON_RESTART].set_focus()
 
 should_be_playing_boom = False
 
-tc = TimeController.TimeController(TIME_IN_SECONDS)
+timecontroller = TimeController.TimeController(TIME_IN_SECONDS)
 musicplayer = myaudio.MyAudio(SHOULD_PLAY_MUSIC)
 while True:
-    if tc.is_running():
+    if timecontroller.is_running():
         event, values = window.read(timeout=10)
-        window["-TimeBox-"].update(tc.status_pretty())
-        if tc.is_timer_over():
+        window["-TimeBox-"].update(timecontroller.status_pretty())
+        if timecontroller.is_timer_over():
             if not should_be_playing_boom:
                 should_be_playing_boom = True
                 print("boom")
                 musicplayer.start(MUSIC_ALARM)
-                tc.reset()
+                timecontroller.reset()
                 window[BUTTON_RESTART].set_focus()
 
     else:
@@ -100,29 +100,29 @@ while True:
     # print(event)
     # dumper(values)
     if event in (None, sg.WIN_CLOSED, BUTTON_EXIT):
-        print(f"{tc.status()} EVENT={event} ")
+        print(f"{timecontroller.status()} EVENT={event} ")
         musicplayer.stop()
         # if user closes window or clicks cancel
         break
     elif event == BUTTON_RESTART:
-        print(f"{tc.status()} EVENT={event} ")
+        print(f"{timecontroller.status()} EVENT={event} ")
         window[BUTTON_PAUSE_UNPAUSE].set_focus()
         musicplayer.stop()
-        tc.reset()
-        tc.start()
+        timecontroller.reset()
+        timecontroller.start()
         musicplayer.start(MUSIC_AMBIENT)
         should_be_playing_boom = False
 
     elif event == BUTTON_PAUSE_UNPAUSE:
-        print(f"{tc.status()} EVENT={event} ")
-        tc.pause_or_unpause()
+        print(f"{timecontroller.status()} EVENT={event} ")
+        timecontroller.pause_or_unpause()
         musicplayer.pause_or_unpause()
     elif event == BUTTON_RESET:
-        print(f"{tc.status()} EVENT={event} ")
-        tc.reset()
+        print(f"{timecontroller.status()} EVENT={event} ")
+        timecontroller.reset()
         musicplayer.reset()
         should_be_playing_boom = False
-        window["-TimeBox-"].update(tc.status_pretty())
+        window["-TimeBox-"].update(timecontroller.status_pretty())
         window[BUTTON_RESTART].set_focus()
     else:
         time.sleep(GUI_REFRESH_LOOP)
