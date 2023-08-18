@@ -11,7 +11,7 @@ import PySimpleGUI as sg
 # settings
 GUI_REFRESH_LOOP = 0.1
 FONT_SIZE = 300
-TIME_IN_SECONDS = 10
+TIME_IN_SECONDS = 300
 
 
 MUSIC_AMBIENT = "assets/ambient"
@@ -81,11 +81,23 @@ should_be_playing_boom = False
 
 timecontroller = TimeController.TimeController(TIME_IN_SECONDS)
 musicplayer = myaudio.MyAudio(SHOULD_PLAY_MUSIC)
+serialcontroller = myserial.MySerial()
+
+serialcontroller_started = False
+
 while True:
     if timecontroller.is_running():
         event, values = window.read(timeout=10)
         window["-TimeBox-"].update(timecontroller.status_pretty())
-        if timecontroller.is_timer_over():
+
+        if serialcontroller.get_player_won():
+            should_be_playing_boom = False
+            print("victory")
+            musicplayer.start(MUSIC_VICTORY)
+            timecontroller.reset()
+            window[BUTTON_RESTART].set_focus()
+
+        elif serialcontroller.get_alarm_triggered() or timecontroller.is_timer_over():
             if not should_be_playing_boom:
                 should_be_playing_boom = True
                 print("boom")
@@ -101,6 +113,7 @@ while True:
     # dumper(values)
     if event in (None, sg.WIN_CLOSED, BUTTON_EXIT):
         print(f"{timecontroller.status()} EVENT={event} ")
+        serialcontroller.stop()
         musicplayer.stop()
         # if user closes window or clicks cancel
         break
@@ -109,6 +122,7 @@ while True:
         window[BUTTON_PAUSE_UNPAUSE].set_focus()
         musicplayer.stop()
         timecontroller.reset()
+        serialcontroller.reset()
         timecontroller.start()
         musicplayer.start(MUSIC_AMBIENT)
         should_be_playing_boom = False
@@ -117,15 +131,21 @@ while True:
         print(f"{timecontroller.status()} EVENT={event} ")
         timecontroller.pause_or_unpause()
         musicplayer.pause_or_unpause()
+        serialcontroller.reset()
     elif event == BUTTON_RESET:
         print(f"{timecontroller.status()} EVENT={event} ")
         timecontroller.reset()
         musicplayer.reset()
+        serialcontroller.reset()
         should_be_playing_boom = False
         window["-TimeBox-"].update(timecontroller.status_pretty())
         window[BUTTON_RESTART].set_focus()
     else:
         time.sleep(GUI_REFRESH_LOOP)
+
+    if not serialcontroller_started:
+        serialcontroller_started = True
+        serialcontroller.start_in_background()
 
     # logger(f"You entered {values[0]}")
 
