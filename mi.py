@@ -10,8 +10,8 @@ import PySimpleGUI as sg
 
 # settings
 GUI_REFRESH_LOOP = 0.1
-FONT_SIZE = 300
-TIME_IN_SECONDS = 300
+FONT_SIZE = 400
+TIME_IN_SECONDS = 180
 
 
 MUSIC_AMBIENT = "assets/ambient"
